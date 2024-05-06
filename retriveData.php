@@ -19,7 +19,7 @@ if($result->num_rows>0)
         $id=$row["Id"];
         $name=$row['name'];
         $email=$row['email'];
-        echo "The id is $id <br> The name is $name <br> The email is $email";
+        
     }
 }
 
