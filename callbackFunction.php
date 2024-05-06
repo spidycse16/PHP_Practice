@@ -1,8 +1,11 @@
 <?php
+
 function hey()
 {
     echo "This is hey function";
 }
+
+
 function hello()
 {
     echo " this is hello function";
