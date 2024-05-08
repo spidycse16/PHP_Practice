@@ -46,16 +46,32 @@ class InsertData {
         $this->conn = $conn;
     }
     
-    function insert($sql)
+    function insert($tablename,$columns,$values)
      {
-        $result = mysqli_query($this->conn, $sql);
-        if (!$result)
-         {
-            throw new Exception("Couldn't able to insert into table: " . mysqli_error($this->conn));
-        } else
-         {
-            echo "Values inserted successfully <br>";
+        if (count($columns) !== count($values)) {
+            throw new Exception("Number of columns doesnt match<br>");
         }
+    
+        $columnNames = implode(', ', $columns);
+        $quotedValues = [];
+        foreach ($values as $value)
+         {
+            $quotedValues[] = "'" . $value . "'";
+        }
+        $valuesString = implode(', ', $quotedValues);
+
+        $sql = "INSERT INTO $tablename ($columnNames) VALUES ($valuesString)";
+ 
+          echo "$sql";
+          $result=mysqli_query($this->conn,$sql);
+          if($result==0)
+          {
+            throw new Exception("Couldnt insert values in $tablename table".mysqli_connect_error());
+          }
+          else
+          {
+            echo "Successfully inserted into $tablename<br>";
+          }
     }
 }
 
@@ -136,8 +152,11 @@ try {
 
     //pass tablename and corresponding column values 
     $c1 = new InsertData($connection->conn);
-    $c1->insert("INSERT INTO newtable VALUES (9, 'abid', 'abid@gmail.com')");
-
+    $c1_tableName = "login";
+    $c1_columns = ["name","password","email"];
+    $c1_values = ["alice@example.com", "30"];
+    //$c1->insert("INSERT INTO newtable VALUES (9, 'abid', 'abid@gmail.com')");
+    $c1->insert($c1_tableName,$c1_columns,$c1_values);
 
     $c2=new ShowallData($connection->conn);
     $c2->show("select * from newtable");
