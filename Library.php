@@ -13,6 +13,31 @@ class Connect {
     }
 }
 
+class create{
+    public $conn;
+
+    public function __construct($conn)
+    {
+        $this->conn=$conn;
+    }
+
+    function createTable(string $tableName, string $columns)
+{
+
+  $sql = "CREATE TABLE " . $tableName . " (";
+  $sql .= $columns . ");";
+
+  $result=mysqli_query($this->conn,$sql);
+  if($result==0)
+  {
+    throw new Exception("Unable to connect",mysqli_error($this->conn));
+  }
+  else
+  {
+    echo "Table created successfully<br>";
+  }
+}
+}
 class InsertData {
     public $conn;
     
@@ -109,8 +134,9 @@ class DeleteData{
 try {
     $connection = new Connect("localhost", "root", "", "php");
 
+    //pass tablename and corresponding column values 
     $c1 = new InsertData($connection->conn);
-    $c1->insert("INSERT INTO newtable VALUES (5, 'abid', 'abid@gmail.com')");
+    $c1->insert("INSERT INTO newtable VALUES (9, 'abid', 'abid@gmail.com')");
 
 
     $c2=new ShowallData($connection->conn);
@@ -123,6 +149,11 @@ try {
 
     $c4=new DeleteData($connection->conn);
     $c4->delete("delete from newtable where Id=1");
+
+    $c4=new create($connection->conn);
+    $tablename="temptable";
+    $columns = "id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, email VARCHAR(255) UNIQUE NOT NULL";
+    $c4->createTable($tablename,$columns);
     
 }
  catch (Exception $e)
