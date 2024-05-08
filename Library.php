@@ -142,8 +142,9 @@ class DeleteData{
         $this->conn=$conn;
        
     }
-    function delete($sql)
+    function delete($tableName,$id)
     {
+        $sql="delete from $tableName where id=$id";
         $result=mysqli_query($this->conn,$sql);
         if($result==0)
         {
@@ -155,28 +156,33 @@ class DeleteData{
 }
 
 try {
+    //connection setup
     $connection = new Connect("localhost", "root", "", "php");
+
+
+    //if you want to create a table;
 
     // $c5=new create($connection->conn);
     // $tablename="agetable";
     // $columns = "id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, age INT";
     // $c5->createTable($tablename,$columns);
 
-
-    //pass tablename and corresponding column values 
+    //insert your data first the columns and then corresponding data
     $c1 = new InsertData($connection->conn);
     $c1_tableName = "agetable";
     $c1_columns = ["id","name","age"];
-    $c1_values = [7, "C",30];
+    $c1_values = [60, "C",30];
     //$c1->insert("INSERT INTO newtable VALUES (9, 'abid', 'abid@gmail.com')");
     $c1->insert($c1_tableName,$c1_columns,$c1_values);
 
+    //to show the data. input specific column names. or '*' for all the data
     $c2=new ShowallData($connection->conn);
-    $c2_tablename="login";
-    $c2_columns=["name"];
+    $c2_tablename="agetable";
+    $c2_columns=["name","age"];
     $c2->show($c2_tablename,$c2_columns);
 
 
+    //update any column to specific values;
     $c3=new UpdateData($connection->conn);
     $c3_tableName="agetable";
     $c3_columNname="name";
@@ -185,8 +191,12 @@ try {
     $c3->update($c3_tableName,$c3_columNname,$c3_columnNewValue,$c3_id);
 
 
+    //to delete a entry;
     $c4=new DeleteData($connection->conn);
-    $c4->delete("delete from newtable where Id=1");
+    $c4_tableName="agetable";
+    $c4_id=836;
+    $c4->delete($c4_tableName,$c4_id);
+    //$c4->delete("delete from newtable where Id=1");
 
    
     
