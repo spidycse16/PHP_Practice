@@ -11,6 +11,11 @@ class Connect {
             echo "Connection was successful <br>";
         }
     }
+    function query($sql)
+    {
+        $result=mysqli_query($this->conn,$sql);
+        return $result;
+    }
 }
 
 class create{
